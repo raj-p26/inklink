@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn='navigation_view'>
+    <group android:checkableBehavior='single'
+        android:id='@+id/admin_navigation_bar'>
+        <item
+            android:id="@+id/nav_list_articles"
+            android:title="List all articles"/>
+
+        <item
+            android:id="@+id/nav_list_users"
+            android:title="List all users"/>
+
+        <item
+            android:id="@+id/nav_list_reported_articles"
+            android:title="List Reported Articles"/>
+
+        <item
+            android:id="@+id/nav_list_reported_users"
+            android:title="List Reported Users"/>
+    </group>
+    <item
+        android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/admin_logout"
+                android:title="Log Out"/>
+        </menu>
+    </item>
+</menu>

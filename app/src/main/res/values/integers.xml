@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  MainActivity IDs  -->
+    <integer name="create_article_opt_id">101</integer>
+    <integer name="login_opt_id">102</integer>
+    <integer name="signup_opt_id">103</integer>
+    <integer name="logout_opt_id">104</integer>
+    <integer name="my_posts_id">105</integer>
+    <integer name="my_profile_id">106</integer>
+    <integer name="home_opt_id">107</integer>
+
+    <!--  CreateArticleActivity IDs  -->
+    <integer name="ca_publish_opt_id">201</integer>
+    <integer name="ca_save_as_draft_opt_id">202</integer>
+    <integer name="ca_discard_opt_id">203</integer>
+    <integer name="ca_make_live_opt_id">204</integer>
+
+    <!--  ViewArticleActivity IDs  -->
+    <integer name="va_edit_opt_id">301</integer>
+    <integer name="va_delete_opt_id">302</integer>
+    <integer name="va_report_opt_id">303</integer>
+</resources>
