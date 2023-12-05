@@ -56,7 +56,7 @@ class ReportArticleActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
             reportedArticle.reportType = reportType
             reportedArticle.articleId = intent.getIntExtra("article_id", -1)
-            reportedArticle.userId = user.id
+            reportedArticle.userId = user?.id
 
             helper.addReport(reportedArticle)
 

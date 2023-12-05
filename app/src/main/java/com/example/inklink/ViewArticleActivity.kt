@@ -131,7 +131,7 @@ class ViewArticleActivity : AppCompatActivity() {
             .getString("email", null)
             .equals("admin@inklink.com")
 
-        if (user.email == prefs.getString("email", null) ||
+        if (user?.email == prefs.getString("email", null) ||
             isAdmin) {
             return true
         }
@@ -166,7 +166,7 @@ class ViewArticleActivity : AppCompatActivity() {
             .getUserByEmail(prefs.getString("email", null))
         val articleId = intent.getIntExtra("article_id", -1)
         val article = ReportedArticleTableHelper(this)
-            .checkUserReport(user.id, articleId)
+            .checkUserReport(user!!.id, articleId)
 
         return article == null
     }

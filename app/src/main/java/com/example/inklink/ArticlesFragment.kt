@@ -20,7 +20,7 @@ class ArticlesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_articles, container, false)
         recyclerView = view.findViewById(R.id.articles_recycler_view)
 
-        recyclerView.adapter = ArticlesAdapter(context, "all")
+        recyclerView.adapter = ArticlesAdapter(activity!!.applicationContext, "all")
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view

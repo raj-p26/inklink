@@ -25,7 +25,7 @@ class AdminListUserFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_admin_list_user, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.alu_recycler_view)
-        recyclerView.adapter = AdminListUserAdapter(context)
+        recyclerView.adapter = AdminListUserAdapter(activity!!.applicationContext)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view

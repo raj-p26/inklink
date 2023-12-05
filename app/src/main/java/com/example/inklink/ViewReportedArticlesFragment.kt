@@ -19,7 +19,7 @@ class ViewReportedArticlesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_view_reported_articles, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.vra_recycler_view)
-        recyclerView.adapter = ReportedArticlesAdapter(context)
+        recyclerView.adapter = ReportedArticlesAdapter(activity!!)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view

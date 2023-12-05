@@ -21,7 +21,7 @@ class ViewReportedUsersFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_view_reported_users, container, false)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.vru_recycler_view)
-        recyclerView.adapter = ReportedUsersAdapter(context)
+        recyclerView.adapter = ReportedUsersAdapter(activity!!.applicationContext)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view

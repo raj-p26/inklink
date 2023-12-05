@@ -21,13 +21,13 @@ class MyPostsFragment : Fragment() {
         // Inflate the layout for this fragment
         val myView =  inflater.inflate(R.layout.fragment_my_posts, container, false)
         val userDetails = activity?.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-        val userId = UserTableHelper(context)
+        val userId = UserTableHelper(activity!!.applicationContext)
             .getUserByEmail(userDetails?.getString("email", null))
-            .id
+            ?.id
 
         recyclerView = myView.findViewById(R.id.my_posts_recycler_view)
 
-        recyclerView.adapter = MyArticlesAdapter(activity, context, userId)
+        recyclerView.adapter = MyArticlesAdapter(activity!!, activity!!.applicationContext, userId)
 
 
         recyclerView.layoutManager = LinearLayoutManager(context)

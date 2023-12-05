@@ -21,7 +21,7 @@ class HomeFragment : Fragment() {
         val myView =  inflater.inflate(R.layout.fragment_home, container, false)
         val recyclerView: RecyclerView = myView.findViewById(R.id.new_articles_recycle_view)
 
-        recyclerView.adapter = ArticlesAdapter(activity, "latest")
+        recyclerView.adapter = ArticlesAdapter(activity!!.applicationContext, "latest")
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return myView

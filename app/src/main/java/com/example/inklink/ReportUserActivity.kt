@@ -45,11 +45,11 @@ class ReportUserActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             val prefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
             val reporterId = UserTableHelper(this)
                 .getUserByEmail(prefs.getString("email", null))
-                .id
+                ?.id
 
             val userReport = ReportedUsers()
             userReport.userId = userId
-            userReport.reporterId = reporterId
+            userReport.reporterId = reporterId!!
             userReport.reportType = reportType
 
             helper.addUserReport(userReport)

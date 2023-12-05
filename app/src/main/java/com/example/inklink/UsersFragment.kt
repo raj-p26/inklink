@@ -19,7 +19,7 @@ class UsersFragment : Fragment() {
         val myView = inflater.inflate(R.layout.fragment_users, container, false)
         val recyclerView: RecyclerView = myView.findViewById(R.id.list_users_recycler_view)
 
-        recyclerView.adapter = UsersAdapter(activity)
+        recyclerView.adapter = UsersAdapter(activity!!)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return myView

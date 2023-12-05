@@ -2,19 +2,16 @@ package com.example.inklink
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.example.inklink.dbhelpers.UserTableHelper
+
 import com.example.inklink.models.User
 
 class ProfileFragment : Fragment() {
@@ -34,8 +31,8 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         val sharedPrefs = context?.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-        userTableHelper = UserTableHelper(context)
-        user = userTableHelper.getUserByEmail(sharedPrefs?.getString("email", null))
+        userTableHelper = UserTableHelper(activity!!.applicationContext)
+        user = userTableHelper.getUserByEmail(sharedPrefs?.getString("email", null))!!
         editFirstName = view.findViewById(R.id.profile_edit_name)
         editLastName = view.findViewById(R.id.profile_edit_last_name)
         editUsername = view.findViewById(R.id.profile_edit_username)
@@ -48,7 +45,7 @@ class ProfileFragment : Fragment() {
 
         editButton.setOnClickListener {
             val user = User(
-                userTableHelper.getUserByEmail(this@ProfileFragment.user.email).id,
+                userTableHelper.getUserByEmail(this@ProfileFragment.user.email)!!.id,
                 editFirstName.text.toString(),
                 editLastName.text.toString(),
                 editUsername.text.toString(),

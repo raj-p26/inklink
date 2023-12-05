@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
 import com.google.android.material.navigation.NavigationView
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .beginTransaction()
                     .replace(R.id.fragment_layout, MyPostsFragment())
                     .commit()
-                drawerLayout.closeDrawer(Gravity.LEFT)
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
 
             R.integer.my_profile_id -> {
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .beginTransaction()
                     .replace(R.id.fragment_layout, ProfileFragment())
                     .commit()
-                drawerLayout.closeDrawer(Gravity.LEFT)
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
 
             R.id.nav_home -> {
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .beginTransaction()
                     .replace(R.id.fragment_layout, HomeFragment())
                     .commit()
-                drawerLayout.closeDrawer(Gravity.LEFT)
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
 
             R.id.nav_users -> {
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .beginTransaction()
                     .replace(R.id.fragment_layout, UsersFragment())
                     .commit()
-                drawerLayout.closeDrawer(Gravity.LEFT)
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
 
             R.id.nav_articles -> {
@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .beginTransaction()
                     .replace(R.id.fragment_layout, ArticlesFragment())
                     .commit()
-                drawerLayout.closeDrawer(Gravity.LEFT)
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
         }
         return true

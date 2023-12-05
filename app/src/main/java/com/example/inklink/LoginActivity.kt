@@ -68,12 +68,12 @@ class LoginActivity : AppCompatActivity() {
         val user = UserTableHelper(this)
             .getUserByEmail(emailInput.text.toString())
 
-        intent = if (user.email == "admin@inklink.com")
+        intent = if (user?.email == "admin@inklink.com")
             Intent(this, AdminActivity::class.java)
         else
             Intent(this, MainActivity::class.java)
 
-        editor.putString("fname", user.firstName)
+        editor.putString("fname", user?.firstName)
         editor.putBoolean("isLoggedIn", true)
         editor.putString("email", emailInput.text.toString())
         editor.apply()

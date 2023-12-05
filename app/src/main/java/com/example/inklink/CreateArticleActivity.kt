@@ -33,7 +33,7 @@ class CreateArticleActivity : AppCompatActivity() {
         val intent = intent
 
         user = UserTableHelper(this)
-            .getUserByEmail(prefs.getString("email", null))
+            .getUserByEmail(prefs.getString("email", null))!!
 
         caTitle = findViewById(R.id.ca_title)
         caContent = findViewById(R.id.ca_content)

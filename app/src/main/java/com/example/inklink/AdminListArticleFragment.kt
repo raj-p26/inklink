@@ -26,7 +26,7 @@ class AdminListArticleFragment : Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.ala_recycler_view)
 
-        recyclerView.adapter = AdminListArticlesAdapter(context)
+        recyclerView.adapter = AdminListArticlesAdapter(activity!!.applicationContext)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view

@@ -59,7 +59,7 @@ class ViewUserActivity : AppCompatActivity() {
         val user = UserTableHelper(this)
             .getUserById(intent.getIntExtra("user_id", -1))
 
-        if (user.accountStatus == "suspended") {
+        if (user!!.accountStatus == "suspended") {
             showDialogAndExit()
         }
 
@@ -83,7 +83,7 @@ class ViewUserActivity : AppCompatActivity() {
         val helper = ReportedUserTableHelper(this)
         val vuUserId = intent.getIntExtra("user_id", -1)
 
-        return helper.getReportByUserId(user.id, vuUserId) == null
+        return helper.getReportByUserId(user!!.id, vuUserId) == null
     }
 
     private fun toggleReportButton() {
