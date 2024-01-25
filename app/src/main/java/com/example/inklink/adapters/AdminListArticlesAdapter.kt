@@ -69,6 +69,7 @@ internal class AdminListArticlesAdapter(private val context: Context) :
                 intent.putExtra("article_content", article.articleContent)
                 intent.putExtra("article_title", article.articleTitle)
                 intent.putExtra("author_id", article.userId)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
                 context.startActivity(intent)
             }

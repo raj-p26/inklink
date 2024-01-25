@@ -64,6 +64,7 @@ internal class UsersAdapter(private val context: Context) : RecyclerView.Adapter
             intent.putExtra("user_email", user.email)
             intent.putExtra("user_about", user.about)
             intent.putExtra("account_status", user.accountStatus)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
             context.startActivity(intent)
         }

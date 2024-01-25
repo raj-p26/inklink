@@ -18,12 +18,8 @@ import java.util.ArrayList
 
 internal class ReportedArticlesAdapter(private val context: Context) :
     RecyclerView.Adapter<ReportedArticlesAdapter.ViewHolder>() {
-    private val reportedArticles: ArrayList<ReportedArticles>
-
-    init {
-        this.reportedArticles = ReportedArticleTableHelper(context)
-            .allReportedArticles
-    }
+    private val reportedArticles: ArrayList<ReportedArticles> = ReportedArticleTableHelper(context)
+        .allReportedArticles
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

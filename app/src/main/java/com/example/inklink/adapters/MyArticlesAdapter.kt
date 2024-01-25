@@ -66,6 +66,7 @@ internal class MyArticlesAdapter(private val activity: Activity, private val con
             intent.putExtra("author_id", authorId)
             intent.putExtra("article_content", content)
             intent.putExtra("article_id", articleId)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
             activity.startActivityForResult(intent, 1)
         }

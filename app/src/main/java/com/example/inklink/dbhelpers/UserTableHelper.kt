@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 import com.example.inklink.models.User
 import com.example.inklink.parameters.UserTableParams
@@ -194,6 +195,7 @@ class UserTableHelper(private val context: Context) :
             UserTableParams.COLUMN_ID + "=?",
             arrayOf(user.id.toString())
         )
+        Log.d("pass-dbg", hashPassword(user.password)!!)
     }
 
     /**

@@ -73,12 +73,14 @@ internal class ArticlesAdapter(private val context: Context, type: String) :
 
         override fun onClick(v: View) {
             val intent = Intent(context, ViewArticleActivity::class.java)
+            intent.putExtra("", "")
             intent.putExtra("article_title", tvTitle.text.toString())
             intent.putExtra("article_author", tvAuthor.text.toString())
             intent.putExtra("author_id", id)
             intent.putExtra("article_id", articleId)
             intent.putExtra("article_status", status)
             intent.putExtra("article_content", content)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
             context.startActivity(intent)
         }

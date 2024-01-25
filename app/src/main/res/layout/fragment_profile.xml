@@ -23,18 +23,20 @@
 
         <EditText
             android:id="@+id/profile_edit_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:layout_marginTop='20dp'
             android:layout_marginStart='26dp'
+            android:layout_marginTop='20dp'
+            android:ems="10"
+            android:layout_marginEnd='30dp'
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/profile_name"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/profile_last_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='46dp'
             android:text="Last Name"
@@ -44,7 +46,7 @@
 
         <EditText
             android:id="@+id/profile_edit_last_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='20dp'
             android:ems="10"
@@ -55,7 +57,7 @@
 
         <TextView
             android:id="@+id/profile_username"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='46dp'
             android:text="Username"
@@ -65,7 +67,7 @@
 
         <EditText
             android:id="@+id/profile_edit_username"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='20dp'
             android:ems="10"
@@ -86,7 +88,7 @@
 
         <EditText
             android:id="@+id/profile_edit_email"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='20dp'
             android:ems="10"
@@ -107,7 +109,7 @@
 
         <EditText
             android:id="@+id/profile_edit_password"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop='20dp'
             android:ems="10"
@@ -128,7 +130,7 @@
 
         <EditText
             android:id="@+id/profile_edit_about"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint='Tell us about Yourself'
