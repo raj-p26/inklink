@@ -10,4 +10,16 @@ class ReportedUsers {
     init {
         this.reportStatus = "unhandled"
     }
+
+    override fun toString(): String {
+        return """
+            ReportedUser: {
+                id: ${this.id},
+                userId: ${this.userId},
+                reporterId: ${this.reporterId},
+                reportType: ${this.reportType},
+                reportStatus: ${this.reportStatus},
+            }
+        """.trimIndent()
+    }
 }

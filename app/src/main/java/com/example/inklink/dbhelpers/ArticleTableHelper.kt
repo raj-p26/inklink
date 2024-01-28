@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 import com.example.inklink.models.Article
 import com.example.inklink.parameters.ArticlesTableParams
@@ -24,8 +25,8 @@ class ArticleTableHelper(context: Context?) :
             val db = this.readableDatabase
             onCreate(db)
             val articles = ArrayList<Article>()
-            val sql = "SELECT * FROM " + ArticlesTableParams.TABLE_NAME + " WHERE " +
-                    ArticlesTableParams.COLUMN_STATUS + "=? OR " + ArticlesTableParams.COLUMN_STATUS + "=?"
+            val sql =
+                "SELECT * FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_STATUS}=? OR ${ArticlesTableParams.COLUMN_STATUS}=?"
             val cursor = db.rawQuery(sql, arrayOf("published", "banned"))
 
             while (cursor.moveToNext()) {
@@ -55,8 +56,8 @@ class ArticleTableHelper(context: Context?) :
             val db = this.readableDatabase
             onCreate(db)
             val articles = ArrayList<Article>()
-            val sql = "SELECT * FROM " + ArticlesTableParams.TABLE_NAME + " WHERE " +
-                    ArticlesTableParams.COLUMN_STATUS + "=?"
+            val sql =
+                "SELECT * FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_STATUS}=?"
             val cursor = db.rawQuery(sql, arrayOf("published"))
 
             while (cursor.moveToNext()) {
@@ -86,8 +87,8 @@ class ArticleTableHelper(context: Context?) :
             val db = this.readableDatabase
             onCreate(db)
             val articles = ArrayList<Article>()
-            val sql = "SELECT * FROM " + ArticlesTableParams.TABLE_NAME + " WHERE " +
-                    ArticlesTableParams.COLUMN_STATUS + "=? ORDER BY " + ArticlesTableParams.COLUMN_ID + " DESC"
+            val sql =
+                "SELECT * FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_STATUS}=? ORDER BY ${ArticlesTableParams.COLUMN_ID} DESC"
 
             val cursor = db.rawQuery(sql, arrayOf("published"))
 
@@ -109,24 +110,14 @@ class ArticleTableHelper(context: Context?) :
         }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val sql = "CREATE TABLE IF NOT EXISTS " + ArticlesTableParams.TABLE_NAME + "(" +
-                ArticlesTableParams.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ArticlesTableParams.COLUMN_TITLE + " TEXT," +
-                ArticlesTableParams.COLUMN_CONTENT + " TEXT," +
-                ArticlesTableParams.COLUMN_USER_ID + " INTEGER," +
-                ArticlesTableParams.COLUMN_STATUS + " TEXT DEFAULT 'draft'," +
-                ArticlesTableParams.COLUMN_REPORT_COUNT + " INTEGER DEFAULT 0," +
-                ArticlesTableParams.COLUMN_CREATION_DATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                "FOREIGN KEY " +
-                "(" + ArticlesTableParams.COLUMN_USER_ID + ") " +
-                "REFERENCES " + UserTableParams.TABLE_NAME +
-                "(" + UserTableParams.COLUMN_ID + ") ON DELETE CASCADE ON DELETE CASCADE)"
+        val sql =
+            "CREATE TABLE IF NOT EXISTS ${ArticlesTableParams.TABLE_NAME}(${ArticlesTableParams.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT, ${ArticlesTableParams.COLUMN_TITLE} TEXT,${ArticlesTableParams.COLUMN_CONTENT} TEXT,${ArticlesTableParams.COLUMN_USER_ID} INTEGER,${ArticlesTableParams.COLUMN_STATUS} TEXT DEFAULT 'draft',${ArticlesTableParams.COLUMN_REPORT_COUNT} INTEGER DEFAULT 0,${ArticlesTableParams.COLUMN_CREATION_DATE} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (${ArticlesTableParams.COLUMN_USER_ID}) REFERENCES ${UserTableParams.TABLE_NAME}(${UserTableParams.COLUMN_ID}) ON DELETE CASCADE ON DELETE CASCADE)"
 
         db.execSQL(sql)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE " + ArticlesTableParams.TABLE_NAME)
+        db.execSQL("DROP TABLE ${ArticlesTableParams.TABLE_NAME}")
 
         onCreate(db)
     }
@@ -160,7 +151,7 @@ class ArticleTableHelper(context: Context?) :
         onCreate(db)
         val articles = ArrayList<Article>()
         val sql =
-            "SELECT * FROM " + ArticlesTableParams.TABLE_NAME + " WHERE " + ArticlesTableParams.COLUMN_USER_ID + "=?"
+            "SELECT * FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_USER_ID}=?"
 
         val cursor = db.rawQuery(sql, arrayOf(userId.toString()))
 
@@ -191,7 +182,7 @@ class ArticleTableHelper(context: Context?) :
         val db = this.readableDatabase
         onCreate(db)
         val sql =
-            "SELECT * FROM " + ArticlesTableParams.TABLE_NAME + " WHERE " + ArticlesTableParams.COLUMN_ID + "=?"
+            "SELECT * FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_ID}=?"
         val cursor = db.rawQuery(sql, arrayOf(id.toString()))
 
         cursor.moveToNext()
@@ -266,6 +257,37 @@ class ArticleTableHelper(context: Context?) :
             ArticlesTableParams.TABLE_NAME,
             ArticlesTableParams.COLUMN_ID + "=?",
             arrayOf(article.id.toString())
+        )
+    }
+
+    fun getBannedArticles(): ArrayList<Article> {
+        val bannedArticles: ArrayList<Article> = ArrayList()
+        val db = this.readableDatabase
+        val query =
+            "SELECT ${ArticlesTableParams.COLUMN_ID}, ${ArticlesTableParams.COLUMN_TITLE} FROM ${ArticlesTableParams.TABLE_NAME} WHERE ${ArticlesTableParams.COLUMN_STATUS} = ?"
+        val cursor = db.rawQuery(query, arrayOf("banned"))
+
+        while (cursor.moveToNext()) {
+            val article = Article()
+            article.id = cursor.getInt(0)
+            article.articleTitle = cursor.getString(1)
+
+            bannedArticles.add(article)
+        }
+        Log.d("db-debug", bannedArticles.toString())
+        cursor.close()
+        return bannedArticles
+    }
+
+    fun unbanArticle(articleId: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(ArticlesTableParams.COLUMN_STATUS, "published")
+        db!!.update(
+            ArticlesTableParams.TABLE_NAME,
+            values,
+            "${ArticlesTableParams.COLUMN_ID}=?",
+            arrayOf(articleId.toString())
         )
     }
 }

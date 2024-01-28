@@ -84,6 +84,22 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 drawerLayout.closeDrawer(Gravity.LEFT)
             }
 
+            R.id.nav_list_suspended_users -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.admin_fragment_layout, ListSuspendedUsersFragment())
+                    .commit()
+                drawerLayout.closeDrawer(Gravity.LEFT)
+            }
+
+            R.id.nav_list_banned_articles -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.admin_fragment_layout, ListBannedArticleFragment())
+                    .commit()
+                drawerLayout.closeDrawer(Gravity.LEFT)
+            }
+
             R.id.admin_logout -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Log out?")

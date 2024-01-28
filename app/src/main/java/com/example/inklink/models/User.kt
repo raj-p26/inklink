@@ -11,7 +11,7 @@ class User {
     var accountStatus: String? = null
     var registrationDate: String? = null
 
-    constructor() {}
+    constructor()
 
     constructor(
         firstName: String,
@@ -60,5 +60,20 @@ class User {
         this.email = email
         this.password = password
         this.about = about
+    }
+
+    override fun toString(): String {
+        // Vim macro time.
+        return """
+            User: {
+                id: ${this.id},
+                firstName: ${this.firstName},
+                lastName: ${this.lastName},
+                username: ${this.username},
+                email: ${this.email},
+                password: ${this.password},
+                about: ${this.about},
+            }
+        """.trimIndent()
     }
 }

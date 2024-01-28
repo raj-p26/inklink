@@ -9,11 +9,25 @@ class Article {
     var articleStatus: String? = null
     var creationDate: String? = null
 
-    constructor() {}
+    constructor()
 
     constructor(title: String, content: String, userId: Int) {
         this.articleTitle = title
         this.articleContent = content
         this.userId = userId
+    }
+
+    override fun toString(): String {
+        return """
+            Article: {
+                id: ${this.id},
+                userId: ${this.userId},
+                reportCount: ${this.reportCount},
+                articleTitle: ${this.articleTitle},
+                articleContent: ${this.articleContent},
+                articleStatus: ${this.articleStatus},
+                creationDate: ${this.creationDate},
+            }
+        """.trimIndent()
     }
 }
