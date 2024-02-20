@@ -58,6 +58,12 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun validateData(): Boolean {
         val fname = fnameInput.text.toString()
         val lname = lnameInput.text.toString()

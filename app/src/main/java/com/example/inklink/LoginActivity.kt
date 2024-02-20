@@ -29,10 +29,14 @@ class LoginActivity : AppCompatActivity() {
         userTableHelper = UserTableHelper(this)
 
         loginButton.setOnClickListener {
-            if (validate()) {
-                startNewActivity()
-            }
+            if (validate()) startNewActivity()
         }
+    }
+
+    override fun onBackPressed() {
+        intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun validate(): Boolean {

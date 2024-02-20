@@ -19,17 +19,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    /*
-    *   -- CLIENT SIDE START DATE 22/10/23 --
-    *   -- CLIENT SIDE COMPLETE --
-    *
-    *   -- ADMIN SIDE START DATE: 27/10/2023 --
-    *   Expected End Date: 31/10/2023
-    *
-    *   -- ADMIN SIDE DONE DATE 28/10/23 --
-    *   Project is finally finished!!!
-    * */
-
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var headerView: View
@@ -95,6 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             item.itemId == R.integer.create_article_opt_id -> {
                 val intent = Intent(this, CreateArticleActivity::class.java)
                 startActivity(intent)
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -120,10 +110,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.integer.login_opt_id -> {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
+                finish()
             }
             R.integer.signup_opt_id -> {
                 val intent = Intent(this, RegisterActivity::class.java)
                 startActivity(intent)
+                finish()
             }
             R.integer.logout_opt_id -> {
                 val builder = AlertDialog.Builder(this)

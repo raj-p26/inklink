@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 
 import com.example.inklink.models.User
 import com.example.inklink.parameters.UserTableParams
@@ -14,9 +13,9 @@ import java.security.MessageDigest
 import java.util.ArrayList
 import kotlin.experimental.and
 
-class UserTableHelper(private val context: Context) :
+class UserTableHelper(context: Context) :
     SQLiteOpenHelper(context, UserTableParams.DB_NAME, null, UserTableParams.DB_VERSION) {
-    private var myDb: SQLiteDatabase? = null
+    private lateinit var myDb: SQLiteDatabase
 
     /**
      * Returns an array list of users, containing each field values inside a `User` object.
@@ -27,10 +26,14 @@ class UserTableHelper(private val context: Context) :
         get() {
             myDb = this.readableDatabase
             val sql =
-                "SELECT * FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_EMAIL}!=? AND ${UserTableParams.COLUMN_ACCOUNT_STATUS}!=?"
-            onCreate(myDb!!)
+                """
+                    SELECT * FROM ${UserTableParams.TABLE_NAME} 
+                        WHERE ${UserTableParams.COLUMN_EMAIL}!=? 
+                        AND ${UserTableParams.COLUMN_ACCOUNT_STATUS}!=?
+                """
+            onCreate(myDb)
             val users = ArrayList<User>()
-            val cursor = myDb!!.rawQuery(
+            val cursor = myDb.rawQuery(
                 sql,
                 arrayOf("admin@inklink.com", "suspended")
             )
@@ -55,7 +58,19 @@ class UserTableHelper(private val context: Context) :
         }
     override fun onCreate(db: SQLiteDatabase) {
         val sql =
-            "CREATE TABLE IF NOT EXISTS ${UserTableParams.TABLE_NAME}(${UserTableParams.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT,${UserTableParams.COLUMN_FIRST_NAME} TEXT, ${UserTableParams.COLUMN_LAST_NAME} TEXT, ${UserTableParams.COLUMN_USER_NAME} TEXT, ${UserTableParams.COLUMN_EMAIL} TEXT, ${UserTableParams.COLUMN_PASSWORD} TEXT, ${UserTableParams.COLUMN_ABOUT} TEXT DEFAULT 'A User in Ink Link', ${UserTableParams.COLUMN_ACCOUNT_STATUS} TEXT DEFAULT 'active', ${UserTableParams.COLUMN_REGISTRATION_DATE} TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+            """
+                CREATE TABLE IF NOT EXISTS ${UserTableParams.TABLE_NAME} (
+                    ${UserTableParams.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ${UserTableParams.COLUMN_FIRST_NAME} TEXT,
+                    ${UserTableParams.COLUMN_LAST_NAME} TEXT,
+                    ${UserTableParams.COLUMN_USER_NAME} TEXT,
+                    ${UserTableParams.COLUMN_EMAIL} TEXT,
+                    ${UserTableParams.COLUMN_PASSWORD} TEXT,
+                    ${UserTableParams.COLUMN_ABOUT} TEXT DEFAULT 'A User in Ink Link',
+                    ${UserTableParams.COLUMN_ACCOUNT_STATUS} TEXT DEFAULT 'active',
+                    ${UserTableParams.COLUMN_REGISTRATION_DATE} TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """
 
         db.execSQL(sql)
     }
@@ -65,12 +80,13 @@ class UserTableHelper(private val context: Context) :
         onCreate(db)
     }
 
-    /** * Adds a new user in the database table. *
+    /**
+     * Adds a new user in the database table.
      * @param user the user that needs to be added. user must not be null.
      */
     fun addUser(user: User) {
         myDb = this.writableDatabase
-        onCreate(myDb!!)
+        onCreate(myDb)
         val values = ContentValues()
 
         values.put(UserTableParams.COLUMN_FIRST_NAME, user.firstName)
@@ -79,7 +95,7 @@ class UserTableHelper(private val context: Context) :
         values.put(UserTableParams.COLUMN_EMAIL, user.email)
         values.put(UserTableParams.COLUMN_PASSWORD, hashPassword(user.password))
 
-        myDb!!.insert(UserTableParams.TABLE_NAME, null, values)
+        myDb.insert(UserTableParams.TABLE_NAME, null, values)
     }
 
     /**
@@ -93,12 +109,16 @@ class UserTableHelper(private val context: Context) :
      */
     fun getCredentials(email: String, password: String): Boolean {
         val query =
-            "SELECT * FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_EMAIL}=? AND ${UserTableParams.COLUMN_PASSWORD}=? AND ${UserTableParams.COLUMN_ACCOUNT_STATUS}<>?"
+            """
+                SELECT * FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_EMAIL}=?
+                AND ${UserTableParams.COLUMN_PASSWORD}=?
+                AND ${UserTableParams.COLUMN_ACCOUNT_STATUS}<>?
+            """
         myDb = this.readableDatabase
-        onCreate(myDb!!)
-        val cursor = myDb!!.rawQuery(
+        onCreate(myDb)
+        val cursor = myDb.rawQuery(
             query,
-            arrayOf(email, hashPassword(password)!!, "suspended")
+            arrayOf(email, hashPassword(password), "suspended")
         )
         val ret = cursor.moveToFirst()
         cursor.close()
@@ -117,8 +137,8 @@ class UserTableHelper(private val context: Context) :
         val query =
             "SELECT * FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_ID}=?"
         myDb = this.readableDatabase
-        onCreate(myDb!!)
-        val cursor = myDb!!.rawQuery(query, arrayOf(id.toString()))
+        onCreate(myDb)
+        val cursor = myDb.rawQuery(query, arrayOf(id.toString()))
         if (!cursor.moveToFirst()) {
             return null
         }
@@ -149,8 +169,8 @@ class UserTableHelper(private val context: Context) :
         val query =
             "SELECT * FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_EMAIL}=?"
         myDb = this.readableDatabase
-        onCreate(myDb!!)
-        val cursor = myDb!!.rawQuery(query, arrayOf(email))
+        onCreate(myDb)
+        val cursor = myDb.rawQuery(query, arrayOf(email))
 
         if (!cursor.moveToFirst()) {
             return null
@@ -178,19 +198,21 @@ class UserTableHelper(private val context: Context) :
      */
     fun updateUser(user: User) {
         myDb = this.writableDatabase
-        onCreate(myDb!!)
+        onCreate(myDb)
         val values = ContentValues()
         values.put(UserTableParams.COLUMN_FIRST_NAME, user.firstName)
         values.put(UserTableParams.COLUMN_LAST_NAME, user.lastName)
         values.put(UserTableParams.COLUMN_USER_NAME, user.username)
         values.put(UserTableParams.COLUMN_EMAIL, user.email)
-        values.put(UserTableParams.COLUMN_PASSWORD, hashPassword(user.password))
         values.put(UserTableParams.COLUMN_ABOUT, user.about)
+        if (!user.password!!.isBlank()) {
+            values.put(UserTableParams.COLUMN_PASSWORD, hashPassword(user.password))
+        }
 
-        myDb!!.update(
+        myDb.update(
             UserTableParams.TABLE_NAME,
             values,
-            UserTableParams.COLUMN_ID + "=?",
+            "${UserTableParams.COLUMN_ID}=?",
             arrayOf(user.id.toString())
         )
     }
@@ -203,15 +225,15 @@ class UserTableHelper(private val context: Context) :
      */
     fun suspendUser(id: Int) {
         myDb = this.writableDatabase
-        onCreate(myDb!!)
+        onCreate(myDb)
         val values = ContentValues()
 
         values.put(UserTableParams.COLUMN_ACCOUNT_STATUS, "suspended")
 
-        myDb!!.update(
+        myDb.update(
             UserTableParams.TABLE_NAME,
             values,
-            UserTableParams.COLUMN_ID + "=?",
+            "${UserTableParams.COLUMN_ID}=?",
             arrayOf(id.toString())
         )
     }
@@ -229,8 +251,12 @@ class UserTableHelper(private val context: Context) :
     fun getSuspendedUsers(): ArrayList<User> {
         myDb = readableDatabase
         val suspendedUsers: ArrayList<User> = ArrayList()
-        val query = "SELECT ${UserTableParams.COLUMN_ID}, ${UserTableParams.COLUMN_USER_NAME} FROM ${UserTableParams.TABLE_NAME} WHERE ${UserTableParams.COLUMN_ACCOUNT_STATUS} = ?"
-        val cursor: Cursor = myDb!!.rawQuery(
+        val query = """
+            SELECT ${UserTableParams.COLUMN_ID}, ${UserTableParams.COLUMN_USER_NAME} 
+            FROM ${UserTableParams.TABLE_NAME} 
+            WHERE ${UserTableParams.COLUMN_ACCOUNT_STATUS} = ?
+        """
+        val cursor: Cursor = myDb.rawQuery(
             query,
             arrayOf("suspended")
         )
@@ -247,11 +273,10 @@ class UserTableHelper(private val context: Context) :
     }
 
     fun revertSuspension(userId: Int) {
-        Log.d("db-debug", userId.toString())
         myDb = writableDatabase
         val values = ContentValues()
         values.put(UserTableParams.COLUMN_ACCOUNT_STATUS, "active")
-        myDb!!.update(
+        myDb.update(
             UserTableParams.TABLE_NAME,
             values,
             "${UserTableParams.COLUMN_ID}=?",
@@ -267,8 +292,8 @@ class UserTableHelper(private val context: Context) :
      * @param plainText the actual string that needs to be hashed.
      * @return hashed string of given password.
      */
-    private fun hashPassword(plainText: String?): String? {
-        var generatedHash: String? = null
+    private fun hashPassword(plainText: String?): String {
+        lateinit var generatedHash: String
         try {
             val md = MessageDigest.getInstance("MD5")
             md.update(plainText!!.toByteArray())

@@ -12,7 +12,7 @@ import com.example.inklink.parameters.UserTableParams
 
 import java.util.ArrayList
 
-class ReportedUserTableHelper(private val context: Context?) : SQLiteOpenHelper(
+class ReportedUserTableHelper(context: Context?) : SQLiteOpenHelper(
     context,
     ReportedUsersTableParams.DB_NAME,
     null,
@@ -30,9 +30,13 @@ class ReportedUserTableHelper(private val context: Context?) : SQLiteOpenHelper(
             val db = this.readableDatabase
             val list = ArrayList<ReportedUsers>()
             onCreate(db)
-            val sql = "SELECT COUNT(" + ReportedUsersTableParams.COLUMN_USER_ID + "), " +
-                    ReportedUsersTableParams.COLUMN_USER_ID + " from " + ReportedUsersTableParams.TABLE_NAME + " WHERE " +
-                    ReportedUsersTableParams.COLUMN_REPORT_STATUS + "='unhandled' GROUP BY " + ReportedUsersTableParams.COLUMN_USER_ID
+            val sql =
+                """
+                    SELECT COUNT(${ReportedUsersTableParams.COLUMN_USER_ID}), ${ReportedUsersTableParams.COLUMN_USER_ID}
+                        FROM ${ReportedUsersTableParams.TABLE_NAME}
+                        WHERE ${ReportedUsersTableParams.COLUMN_REPORT_STATUS}='unhandled'
+                        GROUP BY ${ReportedUsersTableParams.COLUMN_USER_ID}
+                """
 
             val cursor = db.rawQuery(
                 sql, null
@@ -49,28 +53,30 @@ class ReportedUserTableHelper(private val context: Context?) : SQLiteOpenHelper(
         }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val sql = "CREATE TABLE IF NOT EXISTS " + ReportedUsersTableParams.TABLE_NAME + "(" +
-                ReportedUsersTableParams.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ReportedUsersTableParams.COLUMN_USER_ID + " INTEGER, " +
-                ReportedUsersTableParams.COLUMN_REPORTER_ID + " INTEGER, " +
-                ReportedUsersTableParams.COLUMN_REPORT_TYPE + " INTEGER, " +
-                ReportedUsersTableParams.COLUMN_REPORT_STATUS + " TEXT DEFAULT 'unhandled', " +
-                ReportedUsersTableParams.COLUMN_REPORT_DATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                "FOREIGN KEY (" + ReportedUsersTableParams.COLUMN_USER_ID + ")" +
-                "REFERENCES " + UserTableParams.TABLE_NAME +
-                "(" + UserTableParams.COLUMN_ID + ")" +
-                "ON DELETE CASCADE ON UPDATE CASCADE, " +
-                "FOREIGN KEY" +
-                "(" + ReportedUsersTableParams.COLUMN_REPORTER_ID + ")" +
-                "REFERENCES " + ArticlesTableParams.TABLE_NAME +
-                "(" + ArticlesTableParams.COLUMN_ID + ")" +
-                "ON DELETE CASCADE ON UPDATE CASCADE)"
+        val sql = """CREATE TABLE IF NOT EXISTS ${ReportedUsersTableParams.TABLE_NAME} (
+                    ${ReportedUsersTableParams.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ${ReportedUsersTableParams.COLUMN_USER_ID} INTEGER,
+                    ${ReportedUsersTableParams.COLUMN_REPORTER_ID} INTEGER,
+                    ${ReportedUsersTableParams.COLUMN_REPORT_TYPE} INTEGER,
+                    ${ReportedUsersTableParams.COLUMN_REPORT_STATUS} TEXT DEFAULT 'unhandled',
+                    ${ReportedUsersTableParams.COLUMN_REPORT_DATE} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (${ReportedUsersTableParams.COLUMN_USER_ID})
+                    REFERENCES ${UserTableParams.TABLE_NAME}
+                    (${UserTableParams.COLUMN_ID})
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY
+                    (${ReportedUsersTableParams.COLUMN_REPORTER_ID})
+                    REFERENCES ${ArticlesTableParams.TABLE_NAME}
+                    (${ArticlesTableParams.COLUMN_ID})
+                    ON DELETE CASCADE ON UPDATE CASCADE
+                )
+                """
 
         db.execSQL(sql)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE " + ReportedUsersTableParams.TABLE_NAME)
+        db.execSQL("DROP TABLE ${ReportedUsersTableParams.TABLE_NAME}")
 
         onCreate(db)
     }
@@ -107,10 +113,11 @@ class ReportedUserTableHelper(private val context: Context?) : SQLiteOpenHelper(
         val db = this.readableDatabase
         onCreate(db)
         val user = ReportedUsers()
-        val sql = "SELECT * FROM " +
-                ReportedUsersTableParams.TABLE_NAME + " WHERE " +
-                ReportedUsersTableParams.COLUMN_USER_ID + "=? AND " +
-                ReportedUsersTableParams.COLUMN_REPORTER_ID + "=?"
+        val sql =
+            """SELECT * FROM ${ReportedUsersTableParams.TABLE_NAME}
+                    WHERE ${ReportedUsersTableParams.COLUMN_USER_ID}=? 
+                    AND ${ReportedUsersTableParams.COLUMN_REPORTER_ID}=?
+            """
         val cursor = db.rawQuery(
             sql,
             arrayOf(userId.toString(), reporterId.toString())
@@ -145,7 +152,7 @@ class ReportedUserTableHelper(private val context: Context?) : SQLiteOpenHelper(
         db.update(
             ReportedUsersTableParams.TABLE_NAME,
             values,
-            ReportedUsersTableParams.COLUMN_USER_ID + "=?",
+            "${ReportedUsersTableParams.COLUMN_USER_ID}=?",
             arrayOf(user.userId.toString())
         )
     }

@@ -80,6 +80,7 @@ class ViewArticleActivity : AppCompatActivity() {
                 intent.putExtra("is_draft", true)
 
                 startActivity(intent)
+                finish()
             }
 
             R.integer.va_delete_opt_id -> {

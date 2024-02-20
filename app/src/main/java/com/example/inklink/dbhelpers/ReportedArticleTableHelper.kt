@@ -12,7 +12,7 @@ import com.example.inklink.parameters.UserTableParams
 
 import java.util.ArrayList
 
-class ReportedArticleTableHelper(private val context: Context) :
+class ReportedArticleTableHelper(context: Context) :
     SQLiteOpenHelper(context, ReportedArticlesTableParams.DB_NAME, null, ReportedArticlesTableParams.DB_VERSION) {
 
     /**
@@ -26,9 +26,13 @@ class ReportedArticleTableHelper(private val context: Context) :
             val db = this.readableDatabase
             onCreate(db)
 
-            val sql = "SELECT COUNT(" + ReportedArticlesTableParams.COLUMN_ARTICLE_ID + "), " +
-                    ReportedArticlesTableParams.COLUMN_ARTICLE_ID + " from " + ReportedArticlesTableParams.TABLE_NAME + " WHERE " +
-                    ReportedArticlesTableParams.COLUMN_REPORT_STATUS + "=? GROUP BY " + ReportedArticlesTableParams.COLUMN_ARTICLE_ID
+            val sql =
+                """
+                    SELECT COUNT(${ReportedArticlesTableParams.COLUMN_ARTICLE_ID}), ${ReportedArticlesTableParams.COLUMN_ARTICLE_ID}
+                        FROM ${ReportedArticlesTableParams.TABLE_NAME} 
+                        WHERE ${ReportedArticlesTableParams.COLUMN_REPORT_STATUS}=? 
+                        GROUP BY ${ReportedArticlesTableParams.COLUMN_ARTICLE_ID}
+                """
             val cursor = db.rawQuery(sql, arrayOf("unhandled"))
 
             while (cursor.moveToNext()) {
@@ -43,26 +47,29 @@ class ReportedArticleTableHelper(private val context: Context) :
         }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val sql = "CREATE TABLE IF NOT EXISTS " + ReportedArticlesTableParams.TABLE_NAME + "(" +
-                ReportedArticlesTableParams.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ReportedArticlesTableParams.COLUMN_ARTICLE_ID + " INTEGER, " +
-                ReportedArticlesTableParams.COLUMN_USER_ID + " INTEGER, " +
-                ReportedArticlesTableParams.COLUMN_REPORT_TYPE + " TEXT, " +
-                ReportedArticlesTableParams.COLUMN_REPORT_STATUS + " TEXT DEFAULT 'unhandled', " +
-                ReportedArticlesTableParams.COLUMN_REPORT_DATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                "FOREIGN KEY (" + ReportedArticlesTableParams.COLUMN_USER_ID + ") REFERENCES " +
-                UserTableParams.TABLE_NAME +
-                "(" + UserTableParams.COLUMN_ID + ") ON UPDATE CASCADE ON DELETE CASCADE, " +
-                "FOREIGN KEY (" + ReportedArticlesTableParams.COLUMN_USER_ID + ") REFERENCES " +
-                ArticlesTableParams.TABLE_NAME +
-                "(" + ArticlesTableParams.COLUMN_ID + ") ON UPDATE CASCADE ON DELETE CASCADE" +
-                ")"
+        val sql =
+            """
+                CREATE TABLE IF NOT EXISTS ${ReportedArticlesTableParams.TABLE_NAME} (
+                    ${ReportedArticlesTableParams.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ${ReportedArticlesTableParams.COLUMN_ARTICLE_ID} INTEGER,
+                    ${ReportedArticlesTableParams.COLUMN_USER_ID} INTEGER,
+                    ${ReportedArticlesTableParams.COLUMN_REPORT_TYPE} TEXT,
+                    ${ReportedArticlesTableParams.COLUMN_REPORT_STATUS} TEXT DEFAULT 'unhandled',
+                    ${ReportedArticlesTableParams.COLUMN_REPORT_DATE} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (${ReportedArticlesTableParams.COLUMN_USER_ID})
+                    REFERENCES ${UserTableParams.TABLE_NAME}(${UserTableParams.COLUMN_ID})
+                    ON UPDATE CASCADE ON DELETE CASCADE,
+                    FOREIGN KEY (${ReportedArticlesTableParams.COLUMN_USER_ID})
+                    REFERENCES ${ArticlesTableParams.TABLE_NAME}(${ArticlesTableParams.COLUMN_ID})
+                    ON UPDATE CASCADE ON DELETE CASCADE
+                )
+            """
 
         db.execSQL(sql)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE " + ReportedArticlesTableParams.TABLE_NAME)
+        db.execSQL("DROP TABLE ${ReportedArticlesTableParams.TABLE_NAME}")
 
         onCreate(db)
     }
@@ -96,8 +103,12 @@ class ReportedArticleTableHelper(private val context: Context) :
         onCreate(db)
 
         val articles = ReportedArticles()
-        val sql = "SELECT * FROM " + ReportedArticlesTableParams.TABLE_NAME +
-                " WHERE " + ReportedArticlesTableParams.COLUMN_USER_ID + "=? AND " + ReportedArticlesTableParams.COLUMN_ARTICLE_ID + "=?"
+        val sql =
+            """
+                SELECT * FROM ${ReportedArticlesTableParams.TABLE_NAME}
+                    WHERE ${ReportedArticlesTableParams.COLUMN_USER_ID}=?
+                    AND ${ReportedArticlesTableParams.COLUMN_ARTICLE_ID}=?
+            """
 
         val cursor = db.rawQuery(
             sql,
@@ -134,7 +145,7 @@ class ReportedArticleTableHelper(private val context: Context) :
         db.update(
             ReportedArticlesTableParams.TABLE_NAME,
             values,
-            ReportedArticlesTableParams.COLUMN_ARTICLE_ID + "=?",
+            "${ReportedArticlesTableParams.COLUMN_ARTICLE_ID}=?",
             arrayOf(article.articleId.toString())
         )
     }
