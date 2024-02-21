@@ -3,16 +3,16 @@ package com.example.inklink
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.inklink.dbhelpers.UserTableHelper
 
+import androidx.fragment.app.Fragment
+
+import com.example.inklink.dbhelpers.UserTableHelper
 import com.example.inklink.models.User
 
 class ProfileFragment : Fragment() {
@@ -45,28 +45,28 @@ class ProfileFragment : Fragment() {
         setDetails()
 
         editButton.setOnClickListener {
-            val user = User(
-                userTableHelper.getUserByEmail(this@ProfileFragment.user.email)!!.id,
-                editFirstName.text.toString(),
-                editLastName.text.toString(),
-                editUsername.text.toString(),
-                editEmail.text.toString(),
-                editPassword.text.toString(),
-                editAbout.text.toString()
-            )
+            if (isValid()) {
+                val user = User(
+                    userTableHelper.getUserByEmail(this@ProfileFragment.user.email)!!.id,
+                    editFirstName.text.toString(),
+                    editLastName.text.toString(),
+                    editUsername.text.toString(),
+                    editEmail.text.toString(),
+                    editPassword.text.toString(),
+                    editAbout.text.toString()
+                )
 
-            Log.d("db-debug", user.toString())
+                userTableHelper.updateUser(user)
+                Toast.makeText(activity, "Profile Updated successfully", Toast.LENGTH_SHORT).show()
+                val editor = sharedPrefs?.edit()
+                editor?.putString("fname", editUsername.text.toString())
+                editor?.putString("email", editEmail.text.toString())
+                editor?.apply()
 
-            userTableHelper.updateUser(user)
-            Toast.makeText(activity, "Profile Updated successfully", Toast.LENGTH_SHORT).show()
-            val editor = sharedPrefs?.edit()
-            editor?.putString("fname", editUsername.text.toString())
-            editor?.putString("email", editEmail.text.toString())
-            editor?.apply()
-
-            val intent = Intent(context, MainActivity::class.java)
-            activity?.startActivity(intent)
-            activity?.finish()
+                val intent = Intent(context, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
+            }
         }
 
         return view
@@ -77,7 +77,47 @@ class ProfileFragment : Fragment() {
         editLastName.text = user.lastName
         editUsername.text = user.username
         editEmail.text = user.email
-//        editPassword.text = user.password
         editAbout.text = user.about
+    }
+
+    private fun isValid(): Boolean {
+        val fname = editFirstName.text.toString()
+        val lname = editLastName.text.toString()
+        val email = editEmail.text.toString()
+        val password = editPassword.text.toString()
+        val prefs = activity!!.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val helper = UserTableHelper(activity!!.applicationContext)
+
+        if (fname.isEmpty()) {
+            showError(editFirstName, "First name cannot be blank")
+            return false
+        }
+
+        if (lname.isEmpty()) {
+            showError(editLastName, "Last name cannot be blank")
+            return false
+        }
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showError(editEmail, "Invalid email address")
+            return false
+        }
+
+        if (password.isEmpty() || password.length < 8) {
+            showError(editPassword, "Password must be 8 characters long")
+            return false
+        }
+
+        if (editEmail.text.toString() != prefs.getString("email", null) && helper.exists(email)) {
+            showError(editEmail, "Email is already taken!")
+            return false
+        }
+
+        return true
+    }
+
+    private fun showError(view: TextView, msg: String) {
+        view.error = msg
+        view.requestFocus()
     }
 }
