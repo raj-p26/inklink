@@ -84,7 +84,6 @@ class ProfileFragment : Fragment() {
         val fname = editFirstName.text.toString()
         val lname = editLastName.text.toString()
         val email = editEmail.text.toString()
-        val password = editPassword.text.toString()
         val prefs = activity!!.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         val helper = UserTableHelper(activity!!.applicationContext)
 
@@ -100,11 +99,6 @@ class ProfileFragment : Fragment() {
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showError(editEmail, "Invalid email address")
-            return false
-        }
-
-        if (password.isEmpty() || password.length < 8) {
-            showError(editPassword, "Password must be 8 characters long")
             return false
         }
 
