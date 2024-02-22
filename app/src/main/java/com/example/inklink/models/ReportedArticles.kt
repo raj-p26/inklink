@@ -1,5 +1,8 @@
 package com.example.inklink.models
 
+/**
+ * This class is a model for 'reported_articles' table and contains all the columns of it.
+ */
 class ReportedArticles {
     var id: Int? = 0
     var articleId: Int? = 0

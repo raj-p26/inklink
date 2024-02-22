@@ -105,6 +105,11 @@ class CreateArticleActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * This method is used to save article as given status.
+     *
+     * @param status the status of the article.
+     */
     private fun publishArticleAs(status: String) {
         val helper = ArticleTableHelper(this)
         val article = Article()
@@ -122,6 +127,9 @@ class CreateArticleActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * This method is used to update the status of article to 'published'.
+     */
     private fun makeArticleLive() {
         val helper = ArticleTableHelper(this)
         val article = Article()

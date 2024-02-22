@@ -64,6 +64,11 @@ class RegisterActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * This method is used to make sure that data is valid.
+     *
+     * @return `true` if data is valid else `false` is returned.
+     */
     private fun validateData(): Boolean {
         val fname = fnameInput.text.toString()
         val lname = lnameInput.text.toString()
@@ -105,6 +110,12 @@ class RegisterActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * This method is shows error in targeted View and sets its focus.
+     *
+     * @param targetView targeted view.
+     * @param msg actual string message.
+     */
     private fun showError(targetView: TextView, msg: String) {
         targetView.error = msg
         targetView.requestFocus()

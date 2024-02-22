@@ -70,6 +70,10 @@ class ReportUserActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
+    /**
+     * This method is used to populate the report type array.
+     * It simply adds types of reports into an ArrayList.
+     */
     private fun populateArrayList() {
         reportTypes.add("Harassment or Bullying")
         reportTypes.add("Spam or Misleading Content")

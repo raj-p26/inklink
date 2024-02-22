@@ -1,5 +1,8 @@
 package com.example.inklink.parameters
 
+/**
+ * This object represents all the parameters for 'users' table.
+ */
 object UserTableParams {
     val DB_NAME = "ink_link"
     val DB_VERSION = 1

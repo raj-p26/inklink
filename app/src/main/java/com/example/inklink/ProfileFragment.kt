@@ -72,6 +72,9 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    /**
+     * This method is used to set details to corresponding EditTexts.
+     */
     private fun setDetails() {
         editFirstName.text = user.firstName
         editLastName.text = user.lastName
@@ -80,6 +83,11 @@ class ProfileFragment : Fragment() {
         editAbout.text = user.about
     }
 
+    /**
+     * This method is used to check whether the data is valid or not.
+     *
+     * @return `true` if data is valid otherwise `false` is returned.
+     */
     private fun isValid(): Boolean {
         val fname = editFirstName.text.toString()
         val lname = editLastName.text.toString()
@@ -110,6 +118,12 @@ class ProfileFragment : Fragment() {
         return true
     }
 
+    /**
+     * This method is shows error in targeted View and sets its focus.
+     *
+     * @param view targeted view.
+     * @param msg actual string message.
+     */
     private fun showError(view: TextView, msg: String) {
         view.error = msg
         view.requestFocus()

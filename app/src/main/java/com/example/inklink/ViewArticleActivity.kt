@@ -1,6 +1,5 @@
 package com.example.inklink
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +19,6 @@ class ViewArticleActivity : AppCompatActivity() {
 
     private lateinit var vaAuthor: TextView
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_article)
@@ -118,10 +116,14 @@ class ViewArticleActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 1)
-            recreate()
+        if (requestCode == 1) recreate()
     }
 
+    /**
+     * This method is used to check whether the user is admin or author of the article.
+     *
+     * @return true if user is either admin or author of the article otherwise false.
+     */
     private fun authenticate(): Boolean {
         val intent = intent
         val user = UserTableHelper(this)
@@ -140,24 +142,37 @@ class ViewArticleActivity : AppCompatActivity() {
         return false
     }
 
+    /**
+     * This method is used to check whether the article is banned or not.
+     *
+     * @return true if the article is banned else false.
+     */
     private fun isBanned(): Boolean {
-        val intent = intent
-        if (intent.getStringExtra("article_status").equals("banned"))
-            return true
-
-        return false
+        return intent.getStringExtra("article_status").equals("banned")
     }
 
+    /**
+     * This method shows alert dialog and finishes the activity.
+     */
     private fun showDialogAndExit() {
         val builder = AlertDialog.Builder(this)
 
         builder.setTitle("Warning")
         builder.setMessage("The content of this article has been banned by The admin")
         builder.setPositiveButton("Ok") { _, _ -> finish() }
+        builder.setCancelable(false)
 
-        builder.create().show()
+        builder.show()
     }
 
+    /**
+     * This method is used to check whether the user can report this article or not.
+     * If the user is admin or author of the article, he/she cannot report his/her own article.
+     * If the user is neither admin nor author, then check if user has already reported this article
+     * or not.
+     *
+     * @return true if the user has not reported, otherwise false.
+     */
     private fun canReport(): Boolean {
         val prefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         if (prefs.getString("email", null).equals(null))

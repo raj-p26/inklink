@@ -26,10 +26,7 @@ class MyPostsFragment : Fragment() {
             ?.id
 
         recyclerView = myView.findViewById(R.id.my_posts_recycler_view)
-
         recyclerView.adapter = MyArticlesAdapter(activity!!, activity!!.applicationContext, userId)
-
-
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return myView

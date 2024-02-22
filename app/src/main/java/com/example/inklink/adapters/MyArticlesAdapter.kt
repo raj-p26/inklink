@@ -54,7 +54,6 @@ internal class MyArticlesAdapter(private val activity: Activity, private val con
         var articleId: Int = 0
 
         init {
-
             val cardView = itemView.findViewById<CardView>(R.id.my_posts_row_container)
             cardView.setOnClickListener(this)
         }

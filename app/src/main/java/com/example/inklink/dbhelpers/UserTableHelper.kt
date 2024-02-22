@@ -248,6 +248,12 @@ class UserTableHelper(context: Context) :
         return getUserByEmail(email) != null
     }
 
+    /**
+     * This method is used to get all of the suspended users in the 'users' table.
+     * Returns list of 'Users' model.
+     *
+     * @return list of 'User' model.
+     */
     fun getSuspendedUsers(): ArrayList<User> {
         myDb = readableDatabase
         val suspendedUsers: ArrayList<User> = ArrayList()
@@ -272,6 +278,11 @@ class UserTableHelper(context: Context) :
         return suspendedUsers
     }
 
+    /**
+     * This method is used to revert the suspension of the user.
+     * 
+     * @param userId the ID of the user whose suspension is to be reverted.
+     */
     fun revertSuspension(userId: Int) {
         myDb = writableDatabase
         val values = ContentValues()

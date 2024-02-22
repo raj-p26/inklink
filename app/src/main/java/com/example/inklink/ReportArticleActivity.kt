@@ -74,6 +74,10 @@ class ReportArticleActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
+    /**
+     * This method is used to populate the report type array.
+     * It simply adds types of reports into an ArrayList.
+     */
     private fun populateArrayList() {
         reportTypeArray.add("Religious Content")
         reportTypeArray.add("Violation")
@@ -89,11 +93,15 @@ class ReportArticleActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         reportTypeArray.add("Impersonation and Misrepresentation of Identity")
     }
 
+    /**
+     * This method just shows a success dialog and finishes activity.
+     */
     private fun showSuccessDialogAndExit() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Report")
         builder.setMessage("This article has been reported!")
         builder.setPositiveButton("Ok") { _, _ -> finish() }
+        builder.setCancelable(false)
 
         builder.create().show()
     }

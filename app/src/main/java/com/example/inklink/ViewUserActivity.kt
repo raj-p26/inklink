@@ -73,6 +73,14 @@ class ViewUserActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This method is used to check whether the user can report or not.
+     * If the user is admin or the user himself/herself, they cannot report.
+     * If the user has already reported this user, they also cannot report.
+     * Otherwise they can report.
+     *
+     * @return true if the user can report, otherwise false.
+     */
     private fun canReport(): Boolean {
         val prefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         if (prefs.getString("email", null).equals(null))
@@ -86,6 +94,10 @@ class ViewUserActivity : AppCompatActivity() {
         return helper.getReportByUserId(user!!.id, vuUserId) == null
     }
 
+    /**
+     * This method is used to toggle the report button, This method uses another helper method
+     * to hide the button.
+     */
     private fun toggleReportButton() {
         val prefs = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         if (prefs.getString("email", null).equals(null)) {
@@ -93,19 +105,25 @@ class ViewUserActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This method is used to show the alert dialog and exit the activity.
+     */
     private fun showDialogAndExit() {
         val builder = AlertDialog.Builder(this)
 
         builder.setTitle("Warning")
         builder.setMessage("This user has been suspended by the administrator!")
         builder.setPositiveButton("Ok") { _, _ -> finish() }
+        builder.setCancelable(false)
 
         builder.create().show()
     }
 
+    /**
+     * This method is used to hide the report button.
+     */
     private fun hideReportButton() {
         reportUserButton.visibility = View.GONE
-        reportUserButton.focusable = View.NOT_FOCUSABLE
         reportUserButton.isEnabled = false
     }
 }

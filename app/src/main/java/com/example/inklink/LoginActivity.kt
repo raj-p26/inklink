@@ -39,6 +39,12 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * This method is used to check whether the EditText data is valid or not.
+     * If the data is invalid, this method calls another helper method to show error.
+     *
+     * @return true if the data is valid, otherwise false.
+     */
     private fun validate(): Boolean {
         val email = emailInput.text.toString()
         val password = passwordInput.text.toString()
@@ -61,11 +67,22 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setError(targetTextView: EditText, errorMessage: String) {
-        targetTextView.error = errorMessage
-        targetTextView.requestFocus()
+    /**
+     * This method is used to show the error message to targeted EditText component and set its focus.
+     *
+     * @param targetEditText targeted EditText.
+     * @param errorMessage actual error message to show.
+     */
+    private fun setError(targetEditText: EditText, errorMessage: String) {
+        targetEditText.error = errorMessage
+        targetEditText.requestFocus()
     }
 
+    /**
+     * This method is used to start a new activity.
+     * If the user is admin, AdminActivity is started, otherwise MainActivity(user activity) is started.
+     * This method also puts data in shared preference file.
+     */
     private fun startNewActivity() {
         val intent: Intent
         val editor = sharedPreferences.edit()
@@ -86,6 +103,9 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * This method is used to show alert dialog to the user.
+     */
     private fun showAlert() {
         val builder = AlertDialog.Builder(this)
 

@@ -284,6 +284,11 @@ class ArticleTableHelper(context: Context?) :
         )
     }
 
+    /**
+     * This method is used to get all the banned articles from the table.
+     *
+     * @return array list of 'Article' model.
+     */
     fun getBannedArticles(): ArrayList<Article> {
         val bannedArticles: ArrayList<Article> = ArrayList()
         val db = this.readableDatabase
@@ -305,6 +310,11 @@ class ArticleTableHelper(context: Context?) :
         return bannedArticles
     }
 
+    /**
+     * This method is used to unban the banned article from the table.
+     *
+     * @param articleId the ID of the article which has to unban.
+     */
     fun unbanArticle(articleId: Int) {
         val db = this.writableDatabase
         val values = ContentValues()
